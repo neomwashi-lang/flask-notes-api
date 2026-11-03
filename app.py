@@ -1,11 +1,21 @@
 """Application factory and entry point."""
 from flask import Flask, jsonify
 from flask_restful import Api
+from werkzeug.exceptions import HTTPException
 
 from config import Config
 from extensions import bcrypt, db, migrate
 import models  # noqa: F401  (registers the tables with Flask-Migrate)
 from resources import register_resources
+
+
+class JsonErrorApi(Api):
+    """Flask-RESTful Api that reports HTTP errors as {"errors": [...]}."""
+
+    def handle_error(self, error):
+        if isinstance(error, HTTPException):
+            return jsonify({"errors": [error.description]}), error.code
+        return super().handle_error(error)
 
 
 def create_app(config_class=Config):
@@ -16,7 +26,7 @@ def create_app(config_class=Config):
     bcrypt.init_app(app)
     migrate.init_app(app, db)
 
-    api = Api(app)
+    api = JsonErrorApi(app)
     register_resources(api)
     register_error_handlers(app)
     return app
