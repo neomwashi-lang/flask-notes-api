@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Flask / SQLite
+instance/
+*.db
+
+# Secrets and editor files
+.env
+.vscode/
+.idea/
+
+# Frontend (if the React client is kept in this repo)
+node_modules/
+build/
