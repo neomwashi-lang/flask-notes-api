@@ -4,6 +4,7 @@ from flask_restful import Api
 
 from config import Config
 from extensions import bcrypt, db, migrate
+import models  # noqa: F401  (registers the tables with Flask-Migrate)
 from resources import register_resources
 
 
